@@ -1,0 +1,43 @@
+/** 
+ * @require (function) str-replace;
+ *
+ * example
+ * --------------
+ * 
+ *   @include u-generate-size('.u-hm{postfix} + .u-hm{postfix}', margin-left margin-right, 24px, 1/4, 5);
+ *
+ *   output:
+ *
+ *    .u-hm-0-25 + .u-hm-0-25 {
+ *       margin-left: 6px;
+ *       margin-right: 6px;
+ *     }
+ *     
+ *    .u-hm-0-5 + .u-hm-0-5 {
+ *       margin-left: 12px;
+ *       margin-right: 12px;
+ *     }
+ *     
+ *     {...}
+ *     
+ * -------------- 
+ *    
+ */
+
+@mixin u-generate-size($selector, $props, $base, $step, $limit) {
+  $pattern: '{postfix}';
+
+  
+  @for $i from 1 through $limit {
+    $multiplicator: ($step * $i);
+    $whole: floor($multiplicator);
+    $part: ($multiplicator - $whole);
+    $postfix: '-' + $whole + if($part != 0, '-' + str-slice(#{$part}, 3), '');
+
+    #{str-replace($selector, $pattern, $postfix)} {
+      @each $prop in $props {
+        #{$prop}: ($base * $multiplicator); 
+      }
+    }
+  }
+}
