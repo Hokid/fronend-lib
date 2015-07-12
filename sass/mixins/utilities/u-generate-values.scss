@@ -50,7 +50,7 @@
  *    
  */
 
-@mixin u-generate-size($selector, $props, $base, $step, $limit) {
+@mixin u-generate-values($selector, $props, $base, $step, $limit) {
   $patterns: ('{w}', '{f}', '{i}', '{-w}', '{-f}', '{-i}');
   
   @for $i from 1 through $limit {
@@ -58,16 +58,17 @@
     $whole: floor($multiplicator);
     $fractional: ($multiplicator - $whole);
                                     
-    $new-selector: str-replace-all($selector,
-                                   $patterns, 
-                                   (
-                                    $whole,
-                                    if($fractional != 0, str-slice(#{$fractional}, 3), 0),
-                                    $i,
-                                    if($whole != 0, '-' + $whole, ''),
-                                    if($fractional != 0, '-' + str-slice(#{$fractional}, 3), ''),
-                                    if($i != 0, '-' + $i, ''),
-                                   )
+    $new-selector: str-replace-all(
+      $selector,
+      $patterns, 
+      (
+       $whole,
+       if($fractional != 0, str-slice(#{$fractional}, 3), 0),
+       $i,
+       if($whole != 0, '-' + $whole, ''),
+       if($fractional != 0, '-' + str-slice(#{$fractional}, 3), ''),
+       if($i != 0, '-' + $i, ''),
+      )
     );
     
     #{$new-selector} {
